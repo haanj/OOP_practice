@@ -62,6 +62,18 @@ Player.prototype.move = function(newLocation) {
   }
 }
 
+function PaladinPlayer(name, location) {
+  this.name = name
+  this.inventory = []
+  this.location = location
+  this.health = 10
+}
+
+PaladinPlayer.prototype.addItem = function(itemName) {
+  console.log('You can\'t pick that up, that\'s not yours!')
+}
+
+PaladinPlayer.__proto__ = Player
 
 function Item(name, description, use) {
   this.name = name
@@ -131,9 +143,20 @@ function playerInit() {
   console.log('Hello adventurer! What is your name?')
   prompt.get(promptSchema, function(err, result) {
     console.log(`\nHello ${result.answer}!`)
-    let player = new Player(result.answer, roomInit())
-    player.location.look()
-    options(player)
+    let name = result.answer
+
+    console.log('Are you a paladin? y/n')
+    prompt.get(promptSchema, function(err, result) {
+      if (result.answer == 'n') {
+        console.log('Great!')
+        var player = new Player(name, roomInit())
+      } else {
+        console.log('This may be difficult') 
+        var player = new ArmlessPlayer(name, roomInit())
+      }
+      player.location.look()
+      options(player)
+    })
   })
 }
 
