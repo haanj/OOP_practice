@@ -13,90 +13,99 @@ let promptSchema = {
 
  
 // Constructors \\
-function Player(name, location) {
-  this.name = name
-  this.inventory = []
-  this.location = location
-  this.health = 10
-}
-
-Player.prototype.checkInventory = function () {
-  let items = this.inventory.map(function(ele) {return ele.name})
-  console.log(`You are carrying ${items.join(', ') || 'nothing'}.`)
-}
-
-Player.prototype.checkHealth = function() {
-  console.log(`You have ${this.health} health`)
-}
-
-Player.prototype.useItem = function(itemName) {
-  let item = this.inventory.filter(function(ele) {
-    if (ele.name == itemName) {
-      console.log(`you use the ${ele.name}.`)  
-      return true 
+class Player {
+  constructor(name, location) {
+    this.name = name
+    this.inventory = []
+    this.location = location
+    this.health = 10
+    
+    //methods
+    this.checkInventory = function () {
+      let items = this.inventory.map(function(ele) {return ele.name})
+      console.log(`You are carrying ${items.join(', ') || 'nothing'}.`)
     }
-    return false
-  })[0]
 
-  item.use(this)
-}
-
-
-Player.prototype.addItem = function(itemName) {
-  let item = this.location.getItem(itemName)
-  if (item != []) {
-   this.inventory.push(item)
-   return console.log('and put it into your bag')
-  }
-
-  console.log('That item doesn\'t exist.') 
-}
-
-Player.prototype.move = function(newLocation) {
-  try {
-  this.location = this.location.directions[newLocation]
-  console.log(`You move to the ${newLocation}`)
-  }
-  catch (err) {
-    console.log('Sorry, that location doesn\'t exist.') 
-  }
-}
-
-
-function Item(name, description, use) {
-  this.name = name
-  this.description = description
-  this.use = use
-}
-
-function Room(description, directions, items) {
-  this.description = description
-  this.directions = directions
-  this.items = items
-}
-
-Room.prototype.look = function() {
-  console.log(this.description)
-  let items = this.items.map(function(ele) {return ele.name})
-  let directions = Object.keys(this.directions)
-  console.log(`The room has ${items.join(', ') || 'nothing in it'}.`)
-  console.log(`There are entrances to the ${directions.join(', ')}`)
-}
-
-Room.prototype.getItem = function(itemName) {
-  let item
-  let items = this.items.filter(function(ele) {
-    if (ele.name == itemName) {
-      console.log(`you grab the ${ele.name}.`)  
-      item = ele
-      return false 
+    this.checkHealth = function() {
+      console.log(`You have ${this.health} health`)
     }
-    return true
-  })
-  this.items = items
-  return item?item:false 
+
+    this.useItem = function(itemName) {
+      let item = this.inventory.filter(function(ele) {
+        if (ele.name == itemName) {
+          console.log(`you use the ${ele.name}.`)  
+          return true 
+        }
+        return false
+      })[0]
+
+      item.use(this)
+    }
+
+
+    this.addItem = function(itemName) {
+      let item = this.location.getItem(itemName)
+      if (item != []) {
+       this.inventory.push(item)
+       return console.log('and put it into your bag')
+      }
+
+      console.log('That item doesn\'t exist.') 
+    }
+
+    this.move = function(newLocation) {
+      try {
+      this.location = this.location.directions[newLocation]
+      console.log(`You move to the ${newLocation}`)
+      }
+      catch (err) {
+        console.log('Sorry, that location doesn\'t exist.') 
+      }
+    }
+  }
 }
 
+
+
+class Item {
+  constructor(name, description, use) {
+    this.name = name
+    this.description = description
+    this.use = use
+  }
+}
+
+class Room {
+  constructor(description, directions, items) {
+    this.description = description
+    this.directions = directions
+    this.items = items
+
+    //methods
+    this.look = function() {
+      console.log(this.description)
+      let items = this.items.map(function(ele) {return ele.name})
+      let directions = Object.keys(this.directions)
+      console.log(`The room has ${items.join(', ') || 'nothing in it'}.`)
+      console.log(`There are entrances to the ${directions.join(', ')}`)
+    }
+
+    this.getItem = function(itemName) {
+      let item
+      let items = this.items.filter(function(ele) {
+        if (ele.name == itemName) {
+          console.log(`you grab the ${ele.name}.`)  
+          item = ele
+          return false 
+        }
+        return true
+
+      })
+      this.items = items
+      return item?item:false 
+    }
+  }
+}
 
 // Game initialization
 
