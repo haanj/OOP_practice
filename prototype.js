@@ -70,7 +70,7 @@ function PaladinPlayer(name, location) {
 }
 
 PaladinPlayer.prototype.addItem = function(itemName) {
-  console.log('You can\'t pick that up, that\'s not yours!')
+  console.log('You can\'t take that, that\'s not yours!')
 }
 
 PaladinPlayer.__proto__ = Player
@@ -152,7 +152,7 @@ function playerInit() {
         var player = new Player(name, roomInit())
       } else {
         console.log('This may be difficult') 
-        var player = new ArmlessPlayer(name, roomInit())
+        var player = new PaladinPlayer(name, roomInit())
       }
       player.location.look()
       options(player)

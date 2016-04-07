@@ -65,7 +65,16 @@ class Player {
   }
 }
 
+class PaladinPlayer extends Player {
+  constructor(name, location) {
+    super(name, location)
+    this.addItem = function(itemName) {
+      console.log('You can\'t take that, that\'s not yours!')
+    } 
+  
+  }
 
+}
 
 class Item {
   constructor(name, description, use) {
@@ -140,9 +149,20 @@ function playerInit() {
   console.log('Hello adventurer! What is your name?')
   prompt.get(promptSchema, function(err, result) {
     console.log(`\nHello ${result.answer}!`)
-    let player = new Player(result.answer, roomInit())
-    player.location.look()
-    options(player)
+    let name = result.answer
+
+    console.log('Are you a paladin? y/n')
+    prompt.get(promptSchema, function(err, result) {
+      if (result.answer == 'n') {
+        console.log('Great!')
+        var player = new Player(name, roomInit())
+      } else {
+        console.log('This may be difficult') 
+        var player = new PaladinPlayer(name, roomInit())
+      }
+      player.location.look()
+      options(player)
+    })
   })
 }
 
